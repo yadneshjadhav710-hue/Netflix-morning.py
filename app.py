@@ -1,148 +1,102 @@
 from pathlib import Path
-
 import pandas as pd
 import streamlit as st
 
-st.set_page_config(
-    page_title="Netflix | Viewing Intelligence",
-    page_icon="N",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+st.set_page_config(page_title="Netflix • Insight Studio", page_icon="🎬", layout="wide", initial_sidebar_state="expanded")
 
-st.markdown(
-    """
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-        :root { --ink:#f5f5f1; --muted:#a8a8a8; --paper:#050505; --surface:rgba(20,20,20,.88); --surface-2:rgba(28,28,28,.72); --line:rgba(255,255,255,.10); --red:#e50914; }
-        html,body,[class*="css"] { font-family:'DM Sans',sans-serif; }
-        body { background:#050505; }
-        .stApp { color:var(--ink); background:radial-gradient(circle at 8% 5%,rgba(229,9,20,.22),transparent 25%),radial-gradient(circle at 92% 18%,rgba(150,0,0,.16),transparent 24%),linear-gradient(135deg,#030303 0%,#0b0b0b 48%,#050505 100%); background-attachment:fixed; }
-        .stApp::before { content:""; position:fixed; inset:0; pointer-events:none; background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px); background-size:42px 42px; mask-image:linear-gradient(to bottom,black,transparent 82%); z-index:0; }
-        [data-testid="stSidebar"] { background:linear-gradient(180deg,rgba(12,12,12,.98),rgba(5,5,5,.96)); border-right:1px solid var(--line); box-shadow:12px 0 40px rgba(0,0,0,.25); }
-        [data-testid="stSidebar"]>div { padding-top:1.4rem; }
-        .block-container { padding-top:2rem; padding-bottom:3rem; max-width:1440px; position:relative; z-index:1; }
-        h1,h2,h3 { font-family:'Space Grotesk',sans-serif; color:var(--ink); }
-        h1 { font-size:2.55rem; margin-bottom:.2rem; font-weight:700; }
-        h2 { font-size:1.25rem; }
-        [data-testid="stMetric"] { background:linear-gradient(145deg,rgba(30,30,30,.94),rgba(12,12,12,.88)); border:1px solid var(--line); border-top:3px solid var(--red); border-radius:14px; padding:1.05rem 1.15rem; min-height:116px; box-shadow:0 12px 30px rgba(0,0,0,.22); transition:transform .2s ease,border-color .2s ease; }
-        [data-testid="stMetric"]:hover { transform:translateY(-3px); border-color:rgba(229,9,20,.55); }
-        [data-testid="stMetricLabel"],[data-testid="stCaptionContainer"] { color:var(--muted); }
-        [data-testid="stMetricValue"] { font-family:'Space Grotesk',sans-serif; color:var(--ink); }
-        .eyebrow { color:#ff2430; text-transform:uppercase; font-size:.72rem; font-weight:700; letter-spacing:.15em; }
-        .brand-mark { color:var(--red); font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; letter-spacing:.13em; }
-        .subhead { color:#b7b7b7; margin-top:0; margin-bottom:1.35rem; font-size:1rem; }
-        .section-label { color:#ff2430; text-transform:uppercase; font-size:.72rem; font-weight:700; letter-spacing:.12em; }
-        [data-testid="stVegaLiteChart"],[data-testid="stDataFrame"] { background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:0 12px 30px rgba(0,0,0,.18); }
-        [data-testid="stVegaLiteChart"] { padding:.5rem; }
-        [data-testid="stFileUploader"],[data-baseweb="select"],[data-testid="stDateInput"] { background:var(--surface-2); border-radius:10px; }
-        [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color:var(--muted); }
-        .hero-card { padding:1.35rem 1.5rem; margin-bottom:1.35rem; border:1px solid rgba(255,255,255,.10); border-left:4px solid var(--red); border-radius:16px; background:linear-gradient(105deg,rgba(25,25,25,.92),rgba(12,12,12,.68)); box-shadow:0 18px 45px rgba(0,0,0,.25); }
-        .hero-title { font-family:'Space Grotesk',sans-serif; font-size:2.45rem; font-weight:700; margin:.25rem 0 .35rem; }
-        .hero-text { color:#b9b9b9; font-size:.98rem; margin:0; }
-        .footer-note { color:#777; text-align:center; font-size:.78rem; margin-top:2rem; }
-        @media(max-width:700px){ h1{font-size:1.8rem;} .hero-title{font-size:1.8rem;} .block-container{padding-top:1.3rem;} }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+:root{--red:#e50914;--red2:#ff3340;--bg:#050505;--card:rgba(18,18,18,.82);--line:rgba(255,255,255,.09);--muted:#9d9d9d}
+html,body,[class*="css"]{font-family:'DM Sans',sans-serif}.stApp{background:radial-gradient(circle at 12% 0%,rgba(229,9,20,.30),transparent 27%),radial-gradient(circle at 92% 35%,rgba(120,0,0,.18),transparent 25%),linear-gradient(135deg,#020202,#0b0b0b 50%,#030303);background-attachment:fixed;color:#f5f5f5}
+.stApp:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.42;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 90%)}
+.block-container{max-width:1480px;padding:1.8rem 2rem 3rem;position:relative;z-index:1}.stSidebar{background:#080808}.stSidebar [data-testid="stSidebar"]{background:linear-gradient(180deg,#0b0b0b,#030303);border-right:1px solid var(--line)}
+.hero{position:relative;overflow:hidden;padding:2rem 2.2rem;margin-bottom:1.5rem;border:1px solid var(--line);border-radius:24px;background:linear-gradient(115deg,rgba(25,25,25,.96),rgba(8,8,8,.72));box-shadow:0 24px 70px rgba(0,0,0,.38)}
+.hero:after{content:"N";position:absolute;right:35px;top:-55px;font-family:'Space Grotesk';font-size:230px;font-weight:700;color:rgba(229,9,20,.08);line-height:1}.eyebrow{color:var(--red2);font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase}.hero h1{font-family:'Space Grotesk';font-size:clamp(2rem,4vw,3.5rem);margin:.3rem 0 .4rem;letter-spacing:-.04em}.hero p{color:#aaa;max-width:650px;margin:0;font-size:1rem}.pill{display:inline-block;margin-top:1rem;padding:.35rem .7rem;border:1px solid rgba(229,9,20,.35);border-radius:999px;color:#ddd;background:rgba(229,9,20,.08);font-size:.75rem}
+.brand{font-family:'Space Grotesk';font-size:1.25rem;font-weight:700;letter-spacing:.16em;color:var(--red);padding:.5rem 0}.side-note{color:#777;font-size:.78rem;line-height:1.5}
+[data-testid="stMetric"]{background:linear-gradient(145deg,rgba(29,29,29,.94),rgba(10,10,10,.82));border:1px solid var(--line);border-top:3px solid var(--red);border-radius:16px;padding:1rem 1.15rem;min-height:125px;box-shadow:0 16px 35px rgba(0,0,0,.22);transition:.2s}[data-testid="stMetric"]:hover{transform:translateY(-4px);box-shadow:0 20px 45px rgba(229,9,20,.12)}[data-testid="stMetricValue"]{font-family:'Space Grotesk';font-size:1.8rem}
+.section{font-family:'Space Grotesk';font-size:1.2rem;font-weight:700;margin:1.5rem 0 .75rem}.section span{color:var(--red)}
+[data-testid="stVegaLiteChart"],[data-testid="stDataFrame"]{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 35px rgba(0,0,0,.18);overflow:hidden}.stButton button{border-radius:10px;border:1px solid rgba(229,9,20,.4)}
+[data-baseweb="select"],[data-testid="stDateInput"],[data-testid="stFileUploader"]{border-radius:10px}.footer{text-align:center;color:#666;font-size:.75rem;margin-top:2.2rem;padding-top:1rem;border-top:1px solid var(--line)}
+@media(max-width:700px){.block-container{padding:1rem}.hero{padding:1.4rem}.hero:after{font-size:150px}.hero h1{font-size:2rem}}
+</style>
+""", unsafe_allow_html=True)
 
+def load_csv():
+    roots=[Path.cwd(),Path(__file__).resolve().parent]
+    preferred=["netflix.csv","netflix_100_customers_dataset.csv","netflix_100_customers_dataset (3).csv"]
+    for root in roots:
+        for name in preferred:
+            p=root/name
+            if p.is_file(): return pd.read_csv(p),p.name
+        for p in sorted(root.glob('*.csv')):
+            if 'netflix' in p.name.lower() or 'customer' in p.name.lower():
+                try:return pd.read_csv(p),p.name
+                except Exception:pass
+    return None,None
 
-def load_local_csv() -> pd.DataFrame | None:
-    search_roots=[Path.cwd(),Path(__file__).resolve().parent]
-    preferred_names=["netflix.csv","netflix_100_customers_dataset.csv","netflix_100_customers_dataset (3).csv"]
-    for root in search_roots:
-        for candidate in [root/name for name in preferred_names]:
-            if candidate.is_file(): return pd.read_csv(candidate)
-        for csv_path in sorted(root.glob("*.csv")):
-            name=csv_path.name.lower()
-            if "netflix" in name or "customer" in name:
-                try: return pd.read_csv(csv_path)
-                except (OSError,pd.errors.ParserError,pd.errors.EmptyDataError,UnicodeDecodeError): continue
-    return None
-
-st.sidebar.markdown('<div class="brand-mark">NETFLIX</div>',unsafe_allow_html=True)
-st.sidebar.header("Your dataset")
-uploaded_file=st.sidebar.file_uploader("Upload a CSV file",type=["csv"])
-try:
-    if uploaded_file is not None: netflix=pd.read_csv(uploaded_file); source_label=uploaded_file.name
-    else: netflix=load_local_csv(); source_label="netflix.csv"
-except (OSError,pd.errors.ParserError,pd.errors.EmptyDataError,UnicodeDecodeError) as error:
-    st.error(f"Could not read the CSV file: {error}"); st.stop()
-
-if netflix is None:
-    st.title("Viewing intelligence")
-    st.markdown("Add your viewing data to explore revenue, ratings, and audience trends.")
-    st.info("Upload a CSV from the sidebar, or place `netflix.csv` beside this app.")
-    st.stop()
-
-netflix=netflix.copy()
-if "Watch_Date" in netflix.columns: netflix["Watch_Date"]=pd.to_datetime(netflix["Watch_Date"],errors="coerce")
-if "Monthly_Revenue" in netflix.columns: netflix["Monthly_Revenue"]=pd.to_numeric(netflix["Monthly_Revenue"],errors="coerce")
-if "Rating" in netflix.columns: netflix["Rating"]=pd.to_numeric(netflix["Rating"],errors="coerce")
-
-st.sidebar.caption(f"Source: {source_label} · {len(netflix):,} rows")
-st.sidebar.divider(); st.sidebar.subheader("Filters")
-filtered=netflix.copy()
-for column in ["Region","Subscription_Plan","Category"]:
-    if column in filtered.columns:
-        choices=sorted(filtered[column].dropna().astype(str).unique().tolist())
-        selected=st.sidebar.multiselect(column.replace("_"," "),choices)
-        if selected: filtered=filtered[filtered[column].astype(str).isin(selected)]
-
-if "Watch_Date" in filtered.columns and filtered["Watch_Date"].notna().any():
-    min_date=filtered["Watch_Date"].min().date(); max_date=filtered["Watch_Date"].max().date()
-    selected_dates=st.sidebar.date_input("Watch date",value=(min_date,max_date),min_value=min_date,max_value=max_date)
-    if isinstance(selected_dates,tuple) and len(selected_dates)==2:
-        start_date,end_date=selected_dates
-        filtered=filtered[filtered["Watch_Date"].dt.date.between(start_date,end_date)]
-
-st.markdown('<div class="hero-card"><div class="eyebrow">NETFLIX AUDIENCE ANALYTICS</div><div class="hero-title">Viewing Intelligence Dashboard</div><p class="hero-text">Professional insights into revenue, ratings, regions and audience viewing behaviour.</p></div>',unsafe_allow_html=True)
-st.markdown('<div class="section-label">At a glance</div>',unsafe_allow_html=True)
-revenue=filtered["Monthly_Revenue"].sum() if "Monthly_Revenue" in filtered.columns else 0
-average_rating=filtered["Rating"].mean() if "Rating" in filtered.columns else None
-unique_regions=filtered["Region"].nunique() if "Region" in filtered.columns else None
-metric_columns=st.columns(4)
-metric_columns[0].metric("Records",f"{len(filtered):,}",f"of {len(netflix):,} total")
-metric_columns[1].metric("Monthly revenue",f"${revenue:,.0f}")
-metric_columns[2].metric("Average rating",f"{average_rating:.1f}" if pd.notna(average_rating) else "—")
-metric_columns[3].metric("Regions",f"{unique_regions:,}" if unique_regions is not None else "—")
-
-if filtered.empty:
-    st.warning("No records match these filters. Adjust the selections in the sidebar.")
+st.sidebar.markdown('<div class="brand">NETFLIX</div>',unsafe_allow_html=True)
+st.sidebar.markdown('<div class="side-note">INSIGHT STUDIO<br>Audience & revenue analytics</div>',unsafe_allow_html=True)
+st.sidebar.divider()
+up=st.sidebar.file_uploader('Upload viewing CSV',type=['csv'])
+if up is not None:
+    df=pd.read_csv(up); source=up.name
 else:
-    st.markdown("## Performance")
-    chart_columns=st.columns(2)
-    with chart_columns[0]:
-        st.subheader("Revenue by region")
-        if {"Region","Monthly_Revenue"}.issubset(filtered.columns):
-            region_revenue=filtered.groupby("Region",dropna=False)["Monthly_Revenue"].sum().sort_values(ascending=False)
-            st.bar_chart(region_revenue,color="#e50914",height=300)
-        else: st.caption("Add Region and Monthly_Revenue columns to see this chart.")
-    with chart_columns[1]:
-        st.subheader("Revenue by category")
-        if {"Category","Monthly_Revenue"}.issubset(filtered.columns):
-            category_revenue=filtered.groupby("Category",dropna=False)["Monthly_Revenue"].sum().sort_values(ascending=False)
-            st.bar_chart(category_revenue,color="#e50914",height=300)
-        else: st.caption("Add Category and Monthly_Revenue columns to see this chart.")
-    lower_columns=st.columns([1,1.35])
-    with lower_columns[0]:
-        st.subheader("Ratings by subscription")
-        if {"Subscription_Plan","Rating"}.issubset(filtered.columns):
-            plan_ratings=filtered.groupby("Subscription_Plan",dropna=False)["Rating"].mean().sort_values(ascending=False)
-            st.bar_chart(plan_ratings,color="#e50914",height=280)
-        else: st.caption("Add Subscription_Plan and Rating columns to see this chart.")
-    with lower_columns[1]:
-        st.subheader("Monthly revenue trend")
-        if {"Watch_Date","Monthly_Revenue"}.issubset(filtered.columns):
-            trend=filtered.dropna(subset=["Watch_Date","Monthly_Revenue"]).copy()
-            if not trend.empty:
-                trend["Month"]=trend["Watch_Date"].dt.to_period("M").astype(str)
-                monthly_revenue=trend.groupby("Month")["Monthly_Revenue"].sum()
-                st.line_chart(monthly_revenue,color="#e50914",height=280)
-            else: st.caption("No valid date and revenue values are available for this range.")
-        else: st.caption("Add Watch_Date and Monthly_Revenue columns to see this chart.")
+    df,source=load_csv()
+if df is None:
+    st.markdown('<div class="hero"><div class="eyebrow">Netflix Insight Studio</div><h1>Bring your audience data to life.</h1><p>Upload a CSV to unlock the interactive analytics workspace.</p></div>',unsafe_allow_html=True);st.stop()
 
-st.markdown("## Viewing records")
-st.dataframe(filtered,width="stretch",hide_index=True)
-st.markdown('<div class="footer-note">Netflix Viewing Intelligence • Professional Analytics Dashboard</div>',unsafe_allow_html=True)
+df=df.copy()
+for c in ['Watch_Date']:
+    if c in df: df[c]=pd.to_datetime(df[c],errors='coerce')
+for c in ['Monthly_Revenue','Rating']:
+    if c in df: df[c]=pd.to_numeric(df[c],errors='coerce')
+
+st.sidebar.caption(f"Source: {source} • {len(df):,} records")
+st.sidebar.divider();st.sidebar.subheader('Smart filters')
+filtered=df.copy()
+for c in ['Region','Subscription_Plan','Category']:
+    if c in filtered.columns:
+        vals=sorted(filtered[c].dropna().astype(str).unique())
+        pick=st.sidebar.multiselect(c.replace('_',' '),vals)
+        if pick: filtered=filtered[filtered[c].astype(str).isin(pick)]
+if 'Watch_Date' in filtered and filtered['Watch_Date'].notna().any():
+    lo,hi=filtered['Watch_Date'].min().date(),filtered['Watch_Date'].max().date()
+    dates=st.sidebar.date_input('Watch period',value=(lo,hi),min_value=lo,max_value=hi)
+    if isinstance(dates,tuple) and len(dates)==2: filtered=filtered[filtered['Watch_Date'].dt.date.between(dates[0],dates[1])]
+
+st.markdown('<div class="hero"><div class="eyebrow">NETFLIX • AUDIENCE ANALYTICS</div><h1>Viewing Intelligence</h1><p>One premium workspace for revenue, ratings, regional performance and audience behaviour.</p><div class="pill">● LIVE DATA EXPLORATION</div></div>',unsafe_allow_html=True)
+
+revenue=filtered['Monthly_Revenue'].sum() if 'Monthly_Revenue' in filtered else 0
+rating=filtered['Rating'].mean() if 'Rating' in filtered else None
+regions=filtered['Region'].nunique() if 'Region' in filtered else None
+c=st.columns(4)
+c[0].metric('👥 Audience records',f'{len(filtered):,}',f'{len(df):,} total')
+c[1].metric('💰 Monthly revenue',f'${revenue:,.0f}')
+c[2].metric('⭐ Average rating',f'{rating:.1f}' if pd.notna(rating) else '—')
+c[3].metric('🌎 Active regions',f'{regions:,}' if regions is not None else '—')
+
+if filtered.empty: st.warning('No records match the selected filters.');st.stop()
+st.markdown('<div class="section"><span>01</span> Performance overview</div>',unsafe_allow_html=True)
+a,b=st.columns(2)
+with a:
+    st.subheader('Revenue by region')
+    if {'Region','Monthly_Revenue'}.issubset(filtered.columns): st.bar_chart(filtered.groupby('Region')['Monthly_Revenue'].sum().sort_values(ascending=False),color='#e50914',height=320)
+with b:
+    st.subheader('Revenue by category')
+    if {'Category','Monthly_Revenue'}.issubset(filtered.columns): st.bar_chart(filtered.groupby('Category')['Monthly_Revenue'].sum().sort_values(ascending=False),color='#e50914',height=320)
+
+st.markdown('<div class="section"><span>02</span> Audience intelligence</div>',unsafe_allow_html=True)
+a,b=st.columns([1,1.35])
+with a:
+    st.subheader('Ratings by subscription')
+    if {'Subscription_Plan','Rating'}.issubset(filtered.columns): st.bar_chart(filtered.groupby('Subscription_Plan')['Rating'].mean().sort_values(ascending=False),color='#e50914',height=300)
+with b:
+    st.subheader('Monthly revenue trend')
+    if {'Watch_Date','Monthly_Revenue'}.issubset(filtered.columns):
+        t=filtered.dropna(subset=['Watch_Date','Monthly_Revenue']).copy();t['Month']=t['Watch_Date'].dt.to_period('M').astype(str)
+        st.line_chart(t.groupby('Month')['Monthly_Revenue'].sum(),color='#e50914',height=300)
+
+st.markdown('<div class="section"><span>03</span> Data explorer</div>',unsafe_allow_html=True)
+st.dataframe(filtered,width='stretch',hide_index=True)
+st.markdown('<div class="footer">NETFLIX INSIGHT STUDIO • Built with Streamlit & Pandas • Interactive Analytics</div>',unsafe_allow_html=True)
