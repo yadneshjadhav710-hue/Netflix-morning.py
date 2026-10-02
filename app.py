@@ -7,18 +7,30 @@ st.set_page_config(page_title="Netflix • Insight Studio", page_icon="🎬", la
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-:root{--red:#e50914;--red2:#ff3340;--bg:#050505;--card:rgba(18,18,18,.82);--line:rgba(255,255,255,.09);--muted:#9d9d9d}
-html,body,[class*="css"]{font-family:'DM Sans',sans-serif}.stApp{background:radial-gradient(circle at 12% 0%,rgba(229,9,20,.30),transparent 27%),radial-gradient(circle at 92% 35%,rgba(120,0,0,.18),transparent 25%),linear-gradient(135deg,#020202,#0b0b0b 50%,#030303);background-attachment:fixed;color:#f5f5f5}
-.stApp:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.42;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 90%)}
-.block-container{max-width:1480px;padding:1.8rem 2rem 3rem;position:relative;z-index:1}.stSidebar{background:#080808}.stSidebar [data-testid="stSidebar"]{background:linear-gradient(180deg,#0b0b0b,#030303);border-right:1px solid var(--line)}
-.hero{position:relative;overflow:hidden;padding:2rem 2.2rem;margin-bottom:1.5rem;border:1px solid var(--line);border-radius:24px;background:linear-gradient(115deg,rgba(25,25,25,.96),rgba(8,8,8,.72));box-shadow:0 24px 70px rgba(0,0,0,.38)}
-.hero:after{content:"N";position:absolute;right:35px;top:-55px;font-family:'Space Grotesk';font-size:230px;font-weight:700;color:rgba(229,9,20,.08);line-height:1}.eyebrow{color:var(--red2);font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase}.hero h1{font-family:'Space Grotesk';font-size:clamp(2rem,4vw,3.5rem);margin:.3rem 0 .4rem;letter-spacing:-.04em}.hero p{color:#aaa;max-width:650px;margin:0;font-size:1rem}.pill{display:inline-block;margin-top:1rem;padding:.35rem .7rem;border:1px solid rgba(229,9,20,.35);border-radius:999px;color:#ddd;background:rgba(229,9,20,.08);font-size:.75rem}
-.brand{font-family:'Space Grotesk';font-size:1.25rem;font-weight:700;letter-spacing:.16em;color:var(--red);padding:.5rem 0}.side-note{color:#777;font-size:.78rem;line-height:1.5}
-[data-testid="stMetric"]{background:linear-gradient(145deg,rgba(29,29,29,.94),rgba(10,10,10,.82));border:1px solid var(--line);border-top:3px solid var(--red);border-radius:16px;padding:1rem 1.15rem;min-height:125px;box-shadow:0 16px 35px rgba(0,0,0,.22);transition:.2s}[data-testid="stMetric"]:hover{transform:translateY(-4px);box-shadow:0 20px 45px rgba(229,9,20,.12)}[data-testid="stMetricValue"]{font-family:'Space Grotesk';font-size:1.8rem}
-.section{font-family:'Space Grotesk';font-size:1.2rem;font-weight:700;margin:1.5rem 0 .75rem}.section span{color:var(--red)}
-[data-testid="stVegaLiteChart"],[data-testid="stDataFrame"]{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 35px rgba(0,0,0,.18);overflow:hidden}.stButton button{border-radius:10px;border:1px solid rgba(229,9,20,.4)}
-[data-baseweb="select"],[data-testid="stDateInput"],[data-testid="stFileUploader"]{border-radius:10px}.footer{text-align:center;color:#666;font-size:.75rem;margin-top:2.2rem;padding-top:1rem;border-top:1px solid var(--line)}
-@media(max-width:700px){.block-container{padding:1rem}.hero{padding:1.4rem}.hero:after{font-size:150px}.hero h1{font-size:2rem}}
+:root{--red:#e50914;--red2:#ff4050;--bg:#030304;--card:rgba(17,17,20,.78);--line:rgba(255,255,255,.10);--muted:#a6a6aa;--white:#f7f7f7}
+html,body,[class*="css"]{font-family:'DM Sans',sans-serif}
+.stApp{background:#030304;color:var(--white);overflow-x:hidden}
+/* cinematic layered background */
+.stApp:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% -12%,rgba(229,9,20,.34),transparent 42%),radial-gradient(circle at 8% 72%,rgba(229,9,20,.16),transparent 24%),radial-gradient(circle at 94% 24%,rgba(255,40,55,.12),transparent 22%),linear-gradient(145deg,#010102 0%,#09090c 42%,#020203 100%)}
+.stApp:after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.025) 38%,transparent 55%),repeating-linear-gradient(135deg,rgba(255,255,255,.018) 0 1px,transparent 1px 70px);mask-image:linear-gradient(to bottom,black,transparent 92%)}
+.block-container{max-width:1500px;padding:1.7rem 2rem 3.5rem;position:relative;z-index:2}
+[data-testid="stSidebar"]{background:linear-gradient(180deg,#09090b,#020203);border-right:1px solid var(--line);position:relative;z-index:3}
+[data-testid="stSidebar"]:before{content:"";position:absolute;top:0;left:0;right:0;height:180px;background:radial-gradient(circle at 50% 0,rgba(229,9,20,.20),transparent 68%);pointer-events:none}
+/* premium hero */
+.hero{position:relative;overflow:hidden;padding:2.35rem 2.5rem;margin-bottom:1.5rem;border:1px solid rgba(255,255,255,.11);border-radius:26px;background:linear-gradient(115deg,rgba(19,19,22,.96),rgba(8,8,10,.72) 58%,rgba(35,4,7,.58));box-shadow:0 30px 90px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.05)}
+.hero:before{content:"";position:absolute;width:420px;height:420px;right:-130px;top:-170px;border-radius:50%;background:radial-gradient(circle,rgba(229,9,20,.34),rgba(229,9,20,.06) 42%,transparent 70%);filter:blur(4px)}
+.hero:after{content:"N";position:absolute;right:30px;bottom:-78px;font-family:'Space Grotesk';font-size:300px;font-weight:700;line-height:1;color:transparent;-webkit-text-stroke:2px rgba(229,9,20,.10);text-shadow:0 0 70px rgba(229,9,20,.10)}
+.hero-line{position:absolute;left:0;top:0;width:6px;height:100%;background:linear-gradient(180deg,var(--red2),var(--red),transparent);box-shadow:0 0 25px rgba(229,9,20,.7)}
+.eyebrow{color:var(--red2);font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;position:relative;z-index:2}.hero h1{font-family:'Space Grotesk';font-size:clamp(2.1rem,4vw,3.7rem);margin:.35rem 0 .45rem;letter-spacing:-.045em;position:relative;z-index:2}.hero p{color:#aaa;max-width:720px;margin:0;font-size:1rem;line-height:1.65;position:relative;z-index:2}.pill{display:inline-flex;align-items:center;gap:.45rem;margin-top:1.1rem;padding:.42rem .8rem;border:1px solid rgba(229,9,20,.38);border-radius:999px;color:#ddd;background:rgba(229,9,20,.09);font-size:.72rem;position:relative;z-index:2;box-shadow:0 0 25px rgba(229,9,20,.08)}
+.brand{font-family:'Space Grotesk';font-size:1.28rem;font-weight:700;letter-spacing:.17em;color:var(--red);padding:.5rem 0;text-shadow:0 0 22px rgba(229,9,20,.35)}.side-note{color:#777;font-size:.78rem;line-height:1.5}
+[data-testid="stMetric"]{background:linear-gradient(145deg,rgba(27,27,31,.92),rgba(8,8,10,.78));border:1px solid var(--line);border-top:3px solid var(--red);border-radius:18px;padding:1rem 1.15rem;min-height:125px;box-shadow:0 18px 45px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035);transition:transform .2s ease,box-shadow .2s ease}[data-testid="stMetric"]:hover{transform:translateY(-5px);box-shadow:0 24px 55px rgba(229,9,20,.13),inset 0 1px 0 rgba(255,255,255,.06)}[data-testid="stMetricValue"]{font-family:'Space Grotesk';font-size:1.85rem}
+.section{font-family:'Space Grotesk';font-size:1.2rem;font-weight:700;margin:1.65rem 0 .8rem}.section span{color:var(--red);margin-right:.3rem}
+[data-testid="stVegaLiteChart"],[data-testid="stDataFrame"]{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 45px rgba(0,0,0,.22);overflow:hidden}
+[data-testid="stVegaLiteChart"]{backdrop-filter:blur(12px)}
+[data-baseweb="select"],[data-testid="stDateInput"],[data-testid="stFileUploader"]{border-radius:11px}
+.stButton button{border-radius:11px;border:1px solid rgba(229,9,20,.45);background:rgba(229,9,20,.08)}
+.footer{text-align:center;color:#666;font-size:.75rem;margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--line);letter-spacing:.04em}
+@media(max-width:700px){.block-container{padding:1rem}.hero{padding:1.55rem 1.35rem}.hero:after{font-size:170px}.hero h1{font-size:2rem}.hero p{font-size:.9rem}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -44,7 +56,7 @@ if up is not None:
 else:
     df,source=load_csv()
 if df is None:
-    st.markdown('<div class="hero"><div class="eyebrow">Netflix Insight Studio</div><h1>Bring your audience data to life.</h1><p>Upload a CSV to unlock the interactive analytics workspace.</p></div>',unsafe_allow_html=True);st.stop()
+    st.markdown('<div class="hero"><div class="hero-line"></div><div class="eyebrow">Netflix Insight Studio</div><h1>Bring your audience data to life.</h1><p>Upload a CSV to unlock the interactive analytics workspace.</p></div>',unsafe_allow_html=True);st.stop()
 
 df=df.copy()
 for c in ['Watch_Date']:
@@ -65,7 +77,7 @@ if 'Watch_Date' in filtered and filtered['Watch_Date'].notna().any():
     dates=st.sidebar.date_input('Watch period',value=(lo,hi),min_value=lo,max_value=hi)
     if isinstance(dates,tuple) and len(dates)==2: filtered=filtered[filtered['Watch_Date'].dt.date.between(dates[0],dates[1])]
 
-st.markdown('<div class="hero"><div class="eyebrow">NETFLIX • AUDIENCE ANALYTICS</div><h1>Viewing Intelligence</h1><p>One premium workspace for revenue, ratings, regional performance and audience behaviour.</p><div class="pill">● LIVE DATA EXPLORATION</div></div>',unsafe_allow_html=True)
+st.markdown('<div class="hero"><div class="hero-line"></div><div class="eyebrow">NETFLIX • AUDIENCE ANALYTICS</div><h1>Viewing Intelligence</h1><p>One premium workspace for revenue, ratings, regional performance and audience behaviour.</p><div class="pill">● LIVE DATA EXPLORATION</div></div>',unsafe_allow_html=True)
 
 revenue=filtered['Monthly_Revenue'].sum() if 'Monthly_Revenue' in filtered else 0
 rating=filtered['Rating'].mean() if 'Rating' in filtered else None
